@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billionaire Motivation | Premium Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="floating-particles"></div>
+    
+    <div class="player-container">
+        <div class="glass-effect">
+            <div class="logo-pulse"></div>
+            <div class="premium-badge">
+                <i class="fas fa-diamond"></i>
+                <span>Premium</span>
+            </div>
+            
+            <h1 class="app-title">
+                <i class="fas fa-crown"></i> 
+                Billionaire Motivation
+                <i class="fas fa-crown"></i>
+            </h1>
+
+            <div class="category-indicator">
+                <i class="fas fa-user-tie"></i>
+                <span id="current-category">Mindset Masters</span>
+            </div>
+            
+            <div class="audio-player">
+                <div class="visualizer-container">
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                </div>
+                
+                <div class="track-info">
+                    <div class="track-details">
+                        <i class="fas fa-quote-left"></i>
+                        <p id="track-name" class="track-name">Select a motivation track</p>
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span> / <span id="total-time">0:00</span>
+                    </div>
+                </div>
+
+                <audio id="audio-element"></audio>
+
+                <div class="controls">
+                    <button id="prev-btn" class="control-btn control-btn-side">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button id="play-btn" class="control-btn control-btn-main">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="next-btn" class="control-btn control-btn-side">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div id="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="playback-features">
+                <button class="feature-btn" id="shuffle-btn">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button class="feature-btn" id="repeat-btn">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+
+            <p id="error-message" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i> Unable to load track
+            </p>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
