@@ -1,0 +1,23 @@
+{
+    "name": "Billionaire Motivation",
+    "short_name": "BMotivation",
+    "description": "Premium motivation tracks from successful entrepreneurs",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a1a1a",
+    "theme_color": "#ffcc00",
+    "icons": [
+        {
+            "src": "icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait",
+    "prefer_related_applications": false
+}
