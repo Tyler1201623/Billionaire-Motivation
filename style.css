@@ -120,6 +120,11 @@
   justify-content: center;
   gap: 2rem;
   margin-top: auto;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: visible;
 }
 
 .feature-btn {
@@ -212,6 +217,11 @@ body {
   transform-style: preserve-3d;
   perspective: 1000px;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: visible;
 }
 
 .glass-effect:hover {
@@ -606,6 +616,15 @@ body {
   .track-info {
     padding: 0.8rem;
   }
+
+  .playback-features {
+    gap: 1rem;
+  }
+
+  .feature-btn {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 @media (pointer: coarse) {
@@ -783,4 +802,12 @@ body {
 .ultra-dark-mode .app-title,
 .ultra-dark-mode .category-indicator {
   color: #9090b0;
+}
+
+/* Ensure AI recommendation stays below buttons */
+.ai-recommendation {
+  margin-top: 1rem;
+  width: 100%;
+  position: relative;
+  z-index: 0;
 }
