@@ -1,41 +1,41 @@
 // Track List with all available motivational clips
 const tracks = [
     // Andrew Tate Series
-    { name: "Andrew Tate 1", file: "sounds/Andrew Tate 1.mp4" },
-    { name: "Andrew Tate 2", file: "sounds/Andrew Tate 2.mp4" },
-    { name: "Andrew Tate 3", file: "sounds/Andrew Tate 3.mp4" },
+    { name: "Andrew Tate 1", file: "./sounds/Andrew Tate 1.mp4" },
+    { name: "Andrew Tate 2", file: "./sounds/Andrew Tate 2.mp4" },
+    { name: "Andrew Tate 3", file: "./sounds/Andrew Tate 3.mp4" },
     
     // Warren Buffett Series
-    { name: "Buffett Mindset", file: "sounds/Buffett Mindset.mp4" },
-    { name: "Buffett Wisdom", file: "sounds/Buffett Wisdom.mp4" },
+    { name: "Buffett Mindset", file: "./sounds/Buffett Mindset.mp4" },
+    { name: "Buffett Wisdom", file: "./sounds/Buffett Wisdom.mp4" },
     
     // Ray Dalio Series
-    { name: "Dalio Growth", file: "sounds/Dalio Growth.mp4" },
-    { name: "Dalio Learning", file: "sounds/Dalio Learning.mp4" },
-    { name: "Dalio Pain", file: "sounds/Dalio Pain_15sec.mp4" },
+    { name: "Dalio Growth", file: "./sounds/Dalio Growth.mp4" },
+    { name: "Dalio Learning", file: "./sounds/Dalio Learning.mp4" },
+    { name: "Dalio Pain", file: "./sounds/Dalio Pain_15sec.mp4" },
     
     // Tech Leaders
-    { name: "Elon Musk", file: "sounds/Elon Musk.mp4" },
-    { name: "Jeff Bezos", file: "sounds/Jeff Bezoes.mp4" },
+    { name: "Elon Musk", file: "./sounds/Elon Musk.mp4" },
+    { name: "Jeff Bezos", file: "./sounds/Jeff Bezoes.mp4" },
     
     // David Goggins Series
-    { name: "Goggins Drive", file: "sounds/Goggins Drive.mp4" },
-    { name: "Goggins Hard", file: "sounds/Goggins Hard_15sec.mp4" },
-    { name: "Goggins Power", file: "sounds/Goggins Power.mp4" },
+    { name: "Goggins Drive", file: "./sounds/Goggins Drive.mp4" },
+    { name: "Goggins Hard", file: "./sounds/Goggins Hard_15sec.mp4" },
+    { name: "Goggins Power", file: "./sounds/Goggins Power.mp4" },
     
     // Steve Jobs Series
-    { name: "Jobs Hungry", file: "sounds/Jobs Hungry_15sec.mp4" },
-    { name: "Jobs Innovation", file: "sounds/Jobs Innovation.mp4" },
-    { name: "Jobs Legacy", file: "sounds/Jobs Legacy.mp4" },
-    { name: "Jobs Vision", file: "sounds/Jobs Vision.mp4" },
+    { name: "Jobs Hungry", file: "./sounds/Jobs Hungry_15sec.mp4" },
+    { name: "Jobs Innovation", file: "./sounds/Jobs Innovation.mp4" },
+    { name: "Jobs Legacy", file: "./sounds/Jobs Legacy.mp4" },
+    { name: "Jobs Vision", file: "./sounds/Jobs Vision.mp4" },
     
     // Jordan Peterson Series
-    { name: "Peterson Growth", file: "sounds/Peterson Growth.mp4" },
-    { name: "Peterson Purpose", file: "sounds/Peterson Purpose.mp4" },
+    { name: "Peterson Growth", file: "./sounds/Peterson Growth.mp4" },
+    { name: "Peterson Purpose", file: "./sounds/Peterson Purpose.mp4" },
     
     // General Motivation
-    { name: "Get Up And Grind", file: "sounds/Get Up And Grind.mp4" },
-    { name: "Success Is Never An Accident", file: "sounds/Success Is Never An Accident.mp4" }
+    { name: "Get Up And Grind", file: "./sounds/Get Up And Grind.mp4" },
+    { name: "Success Is Never An Accident", file: "./sounds/Success Is Never An Accident.mp4" }
 ];
 
 // DOM Elements
@@ -185,33 +185,42 @@ class SoundCanvas {
     }
 }
 
-// Enhanced Audio Processing with Spatial Audio & Dynamic Compression
+// Modified initialization for better GitHub Pages compatibility
 function initAdvancedAudioProcessing() {
     if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaElementSource(audioElement);
-        
-        // Create gain node with normal professional gain value
-        gainNode = audioContext.createGain();
-        gainNode.gain.value = 1.5; // Moderate, professional gain
-        
-        // Simple compression with standard broadcast settings
-        compressor = audioContext.createDynamicsCompressor();
-        compressor.threshold.value = -18;
-        compressor.knee.value = 6;
-        compressor.ratio.value = 3;
-        compressor.attack.value = 0.003;
-        compressor.release.value = 0.25;
-        
-        // SIMPLE PROFESSIONAL AUDIO CHAIN: source -> gain -> compressor -> destination
-        source.connect(gainNode);
-        gainNode.connect(compressor);
-        compressor.connect(audioContext.destination);
-        
-        // Initialize visualizer
-        soundCanvas = new SoundCanvas();
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioContext.createMediaElementSource(audioElement);
+            
+            // Simpler audio chain for GitHub Pages compatibility
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 2.0; // Higher gain for GitHub Pages
+            
+            // Minimal processing chain
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            console.log("Audio processing initialized successfully");
+            
+            // Initialize visualizer
+            soundCanvas = new SoundCanvas();
+            
+            return true;
+        } catch (error) {
+            console.error("Failed to initialize audio processing:", error);
+            return false;
+        }
     }
+    return true;
 }
+
+// Force initialize audio on first user click
+document.addEventListener('click', function initAudioOnFirstClick() {
+    if (initAdvancedAudioProcessing()) {
+        console.log("Audio initialized on user interaction");
+        document.removeEventListener('click', initAudioOnFirstClick);
+    }
+}, { once: true });
 
 // Helper function to create band EQ
 function createBandEQ(type, frequency, gain) {
@@ -352,11 +361,38 @@ function updatePlayButton() {
 }
 
 function togglePlay() {
+    // Special handling for GitHub Pages
+    if (audioElement.readyState === 0) {
+        // Force reload the source before playing
+        const currentSrc = audioElement.src;
+        audioElement.src = currentSrc;
+        
+        // Force preload
+        audioElement.load();
+    }
+    
     if (isPlaying) {
         audioElement.pause();
     } else {
-        audioElement.play().catch(handleAudioError);
+        // Initialize audio context if not already done
+        if (!audioContext) {
+            initAdvancedAudioProcessing();
+        }
+        
+        const playPromise = audioElement.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.error("Play error:", error);
+                // Try a different approach
+                audioElement.muted = true;
+                audioElement.play().then(() => {
+                    audioElement.muted = false;
+                }).catch(handleAudioError);
+            });
+        }
     }
+    
     isPlaying = !isPlaying;
     updatePlayButton();
     updateVisualizer();
@@ -838,3 +874,26 @@ function initialAudioBoost() {
 audioElement.addEventListener('play', () => {
     initialAudioBoost();
 }, { once: true });
+
+// Handle missing icon errors
+window.addEventListener('error', function(e) {
+    // If it's an image loading error
+    if (e.target.tagName === 'IMG' || e.target.tagName === 'LINK' && e.target.rel === 'icon') {
+        console.log('Resource failed to load:', e.target.src || e.target.href);
+        e.preventDefault(); // Prevent the error from showing in console
+    }
+}, true);
+
+// Create favicon if missing
+function createFallbackFavicon() {
+    if (!document.querySelector('link[rel="icon"]')) {
+        const favicon = document.createElement('link');
+        favicon.rel = 'icon';
+        favicon.type = 'image/svg+xml';
+        favicon.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">🎵</text></svg>';
+        document.head.appendChild(favicon);
+    }
+}
+
+// Run on load
+window.addEventListener('DOMContentLoaded', createFallbackFavicon);
