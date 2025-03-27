@@ -191,31 +191,25 @@ function initAdvancedAudioProcessing() {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaElementSource(audioElement);
         
-        // Create gain node with higher gain value
+        // Create gain node with normal professional gain value
         gainNode = audioContext.createGain();
-        gainNode.gain.value = 8.0; // Significantly increase from 3.0
+        gainNode.gain.value = 1.5; // Moderate, professional gain
         
-        // Advanced Dynamic Compression with less reduction
+        // Simple compression with standard broadcast settings
         compressor = audioContext.createDynamicsCompressor();
-        compressor.threshold.value = -10; // Changed from -24 (less compression)
-        compressor.knee.value = 15; // Gentler knee
-        compressor.ratio.value = 4; // Lower ratio (less compression)
-        compressor.attack.value = 0.005;
+        compressor.threshold.value = -18;
+        compressor.knee.value = 6;
+        compressor.ratio.value = 3;
+        compressor.attack.value = 0.003;
         compressor.release.value = 0.25;
         
-        // Simplified audio pipeline for better volume performance
+        // SIMPLE PROFESSIONAL AUDIO CHAIN: source -> gain -> compressor -> destination
         source.connect(gainNode);
         gainNode.connect(compressor);
         compressor.connect(audioContext.destination);
         
         // Initialize visualizer
         soundCanvas = new SoundCanvas();
-        
-        // Only add spatial audio if user explicitly enables it
-        const spatialBtn = document.getElementById('spatial-btn');
-        if (spatialBtn) {
-            spatialBtn.addEventListener('click', toggleSpatialAudio);
-        }
     }
 }
 
@@ -545,7 +539,7 @@ audioElement.addEventListener('timeupdate', updateTimeDisplay);
 audioElement.addEventListener('loadedmetadata', updateTimeDisplay);
 audioElement.addEventListener('loadeddata', () => {
     if (gainNode) {
-        gainNode.gain.value = 3.0; // Reset gain for each track
+        gainNode.gain.value = 1.5; // Reset gain for each track
     }
 });
 
@@ -719,8 +713,7 @@ function toggleSpatialAudio() {
     }
 }
 
-// Make audio initialization immediate
-// Replace the play event listener with this immediate initialization
+// Make audio initialization use simple professional settings
 function loadTrack(index) {
     const track = tracks[index];
     audioElement.src = track.file;
@@ -730,44 +723,35 @@ function loadTrack(index) {
     errorMessage.style.display = "none";
     progress.style.width = "0%";
     
-    // Initialize audio processing immediately, don't wait for play
+    // Initialize audio processing immediately
     if (!audioContext) {
         initAdvancedAudioProcessing();
     }
     
-    // AI-based audio profile selection with increased volume
-    selectAudioProfile(track.name, true); // true flag indicates we want extra volume
+    // Use simplified audio profile
+    selectAudioProfile(track.name);
     
     updateCategory();
     updateTimeDisplay();
     updateTrackMetadata(track);
 }
 
-// Update the audio profile selection to boost volume
+// Update the audio profile selection to use professional settings
 function selectAudioProfile(trackName, boostVolume = false) {
     if (!gainNode) return;
     
-    // Boost all tracks' volume
-    const volumeMultiplier = boostVolume ? 2.5 : 1.0;
+    // Use consistent professional settings
+    compressor.threshold.value = -18;
+    compressor.ratio.value = 3;
+    gainNode.gain.value = 1.5;
     
-    // Base settings with increased gain
-    compressor.threshold.value = -12;
-    compressor.ratio.value = 4;
-    gainNode.gain.value = 6.0 * volumeMultiplier;
-    
+    // Just slight tweaks for different voices
     if (trackName.includes("Andrew Tate")) {
-        // Voice-optimized EQ profile
-        gainNode.gain.value = 7.0 * volumeMultiplier;
-        compressor.threshold.value = -10;
-        compressor.ratio.value = 3;
+        gainNode.gain.value = 1.7;
     } 
     else if (trackName.includes("Elon")) {
-        // Technical voice profile
-        gainNode.gain.value = 7.5 * volumeMultiplier;
-        compressor.threshold.value = -12;
-        compressor.ratio.value = 4;
+        gainNode.gain.value = 1.6;
     }
-    // Add similar adjustments for other tracks
 }
 
 // Update track metadata with AI-generated insights
@@ -834,26 +818,20 @@ function toggleDarkMode() {
     }
 }
 
-// Keep the audio boost function but apply it automatically
+// Simplified audio boost function
 function initialAudioBoost() {
-    // Wait for audio context to be initialized
-    setTimeout(() => {
-        // Set maximum volume and enhance gain
-        audioElement.volume = 1.0;
+    // Set standard volume
+    audioElement.volume = 1.0;
+    
+    if (audioContext && gainNode) {
+        gainNode.gain.value = 1.5; // Professional standard gain
         
-        if (audioContext && gainNode) {
-            gainNode.gain.value = 8.0; // High but not extreme gain
-            
-            // Ensure the compressor isn't limiting too much
-            if (compressor) {
-                compressor.threshold.value = -10;
-                compressor.ratio.value = 3;
-                compressor.knee.value = 20;
-            }
+        if (compressor) {
+            compressor.threshold.value = -18;
+            compressor.ratio.value = 3;
+            compressor.knee.value = 6;
         }
-        
-        console.log("Audio enhancement applied automatically");
-    }, 1000);
+    }
 }
 
 // Apply audio boost when playback starts
